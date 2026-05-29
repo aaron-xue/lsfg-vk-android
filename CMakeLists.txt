@@ -13,6 +13,13 @@ if(LSFGVK_ANDROID_WINE)
     add_compile_definitions(LSFGVK_ANDROID_WINE=1)
 endif()
 
+# Android: volk needs VK_USE_PLATFORM_ANDROID_KHR so that vulkan_android.h
+# is included and the AHB extension function pointers (e.g.
+# vkGetAndroidHardwareBufferPropertiesANDROID) are compiled into libvolk.a.
+if(ANDROID)
+    set(VOLK_STATIC_DEFINES "VK_USE_PLATFORM_ANDROID_KHR" CACHE STRING "volk static defines" FORCE)
+endif()
+
 # subprojects
 add_compile_options(-fPIC
     -Wno-deprecated-declarations
