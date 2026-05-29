@@ -1,5 +1,17 @@
-#include <volk.h>
+// volk.h only includes vulkan_core.h, not vulkan_android.h. We need the
+// Android AHB extension types (VkAndroidHardwareBufferFormatPropertiesANDROID,
+// PFN_vkGetAndroidHardwareBufferPropertiesANDROID, etc.) available before
+// volk.h processes its VK_ANDROID_external_memory_android_hardware_buffer
+// guard. Include vulkan_core.h + vulkan_android.h with VK_NO_PROTOTYPES set
+// so no prototype/function-pointer conflicts occur; volk's subsequent include
+// of vulkan_core.h is a no-op thanks to include guards.
+#ifdef __ANDROID__
+#define VK_NO_PROTOTYPES
 #include <vulkan/vulkan_core.h>
+#include <vulkan/vulkan_android.h>
+#endif
+
+#include <volk.h>
 
 #include "core/image.hpp"
 #include "core/device.hpp"
